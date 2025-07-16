@@ -27,6 +27,6 @@ sequenceDiagram
 <img width="468" height="224" alt="image" src="https://github.com/user-attachments/assets/7e5322ff-30c7-4c85-9834-5f01aa74dc98" />
 
 📦 Tech Stack
-•	LangGraph
-•	OpenAI GPT-4
-•	GitHub REST API
+  •	LangGraph
+  •	OpenAI GPT-4
+  •	GitHub REST API
