@@ -14,33 +14,21 @@ A LangGraph-based AI agent system that autonomously detects, understands, and fi
 •	memory_search: retrieves similar errors and past solutions
 
 🧩 LangGraph Architecture Diagram
+
 <img width="302" height="648" alt="image" src="https://github.com/user-attachments/assets/b04f3b4c-33e3-4390-99c7-fce7d7b13256" />
 
 🧠 Agent Flow Diagram
-flowchart LR
-    Start([Start]) --> FetchCI[Fetch CI Failure]
-    FetchCI --> SuggestFix[LLM Suggestion Agent]
-    SuggestFix --> Validate[Validator Agent]
-    Validate --> Memory[Memory Lookup Agent]
-    Memory --> Output([Apply Fix / Comment])
-    Output --> End([End])
+
+<img width="468" height="22" alt="image" src="https://github.com/user-attachments/assets/0cfc0d04-1c89-4775-913c-702d8a095001" />
+
 🔁 CI/CD Healing Lifecycle Illustration
 sequenceDiagram
-    participant DevOps as DevOps System
-    participant Agent as AutoHeal Agent
-    participant LLM as LLM
-    participant GitHub as GitHub Actions
 
-    GitHub->>Agent: Notify Failure
-    Agent->>GitHub: Fetch Logs + YAML
-    Agent->>LLM: Generate Fix Suggestion
-    LLM-->>Agent: Suggested Fix
-    Agent->>DevOps: Validate Fix (dry run)
-    Agent->>GitHub: Post PR or Comment Fix
-    Agent->>Memory: Store error & solution
+<img width="468" height="224" alt="image" src="https://github.com/user-attachments/assets/7e5322ff-30c7-4c85-9834-5f01aa74dc98" />
+
 📦 Tech Stack
 •	LangGraph
 •	OpenAI GPT-4
 •	GitHub REST API
-•	Chroma / Weaviate (for memory)
+
 <img width="468" height="637" alt="image" src="https://github.com/user-attachments/assets/5470828c-dc15-4f22-ae14-8dbabbdd9ed3" />
