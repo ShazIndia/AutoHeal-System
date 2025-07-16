@@ -30,5 +30,3 @@ sequenceDiagram
 •	LangGraph
 •	OpenAI GPT-4
 •	GitHub REST API
-
-<img width="468" height="637" alt="image" src="https://github.com/user-attachments/assets/5470828c-dc15-4f22-ae14-8dbabbdd9ed3" />
