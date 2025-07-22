@@ -1,5 +1,5 @@
 🧠 Self-Healing DevOps Agent (AutoFix CI/CD)
-A LangGraph-based AI agent system that autonomously detects, understands, and fixes CI/CD failures in GitHub Actions using GPT-4.
+A LangGraph-based AI agent system that autonomously detects, understands, and fixes CI/CD failures in GitHub Actions using LLM Model.
 
 🎓 What It Does
   •	Detects failed GitHub Actions workflows
