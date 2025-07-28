@@ -869,3 +869,116 @@ FROM SOLUTIONS s
 JOIN ERRORS e ON s.error_id = e.error_id
 WHERE s.success_rate > 80.0
 ORDER BY s.success_rate DESC, s.usage_count DESC;
+
+
+
+
+erDiagram
+    %% Core Error Storage
+    ERRORS {
+        int error_id PK
+        string error_fingerprint UK "Unique error pattern hash"
+        string source_platform "Jenkins/GitHub/etc"
+        string error_type "Build/Pipeline/Workflow"
+        text error_message
+        text stack_trace
+        text error_context
+        datetime created_at
+        datetime updated_at
+        string classification "Auto-classified category"
+        float confidence_score "Pattern matching confidence"
+    }
+
+    %% Solution Storage
+    SOLUTIONS {
+        int solution_id PK
+        int error_id FK
+        text solution_steps "Step-by-step fix guide"
+        text code_examples "Sample code/commands"
+        text explanation "LLM generated reasoning"
+        string solution_source "Database/LLM/Manual"
+        float success_rate "Historical success percentage"
+        int usage_count "How many times used"
+        datetime created_at
+        datetime last_used_at
+        boolean is_validated "Quality checked"
+    }
+
+    %% Pattern Matching for Similar Errors
+    ERROR_PATTERNS {
+        int pattern_id PK
+        string pattern_hash UK "Normalized pattern identifier"
+        text pattern_template "Template for matching"
+        string keywords "Searchable terms"
+        text metadata "Additional matching criteria"
+        int match_count "How often this pattern matched"
+        datetime created_at
+        datetime updated_at
+    }
+
+    %% Link Errors to Patterns (Many-to-Many)
+    ERROR_PATTERN_LINKS {
+        int link_id PK
+        int error_id FK
+        int pattern_id FK
+        float similarity_score "How well error matches pattern"
+        datetime created_at
+    }
+
+    %% Build/Pipeline Context
+    BUILD_CONTEXTS {
+        int context_id PK
+        int error_id FK
+        string job_name "Jenkins job/GitHub workflow"
+        string branch_name
+        string commit_hash
+        text build_logs "Relevant log excerpts"
+        string environment "dev/staging/prod"
+        json build_metadata "Additional context data"
+        datetime build_timestamp
+    }
+
+    %% LLM Interactions Log
+    LLM_INTERACTIONS {
+        int interaction_id PK
+        int error_id FK
+        text prompt_sent "What was sent to LLM"
+        text llm_response "Raw LLM response"
+        string llm_model "GPT-4/Claude/etc"
+        float processing_time "Response time in seconds"
+        datetime created_at
+        boolean was_successful "Did LLM provide valid solution"
+    }
+
+    %% Metrics and Analytics
+    RESOLUTION_METRICS {
+        int metric_id PK
+        int error_id FK
+        int solution_id FK
+        string resolution_status "Found/Generated/Failed"
+        float lookup_time "Time to find in database"
+        float llm_time "Time for LLM processing"
+        float total_time "End-to-end processing time"
+        datetime resolution_timestamp
+        string user_feedback "Success/Failure feedback"
+    }
+
+    %% Simple User Feedback
+    SOLUTION_FEEDBACK {
+        int feedback_id PK
+        int solution_id FK
+        string feedback_type "Helpful/Not Helpful/Needs Update"
+        text comments "Optional user comments"
+        datetime created_at
+        string user_identifier "Who provided feedback"
+    }
+
+    %% Relationships
+    ERRORS ||--o{ SOLUTIONS : "has"
+    ERRORS ||--o{ ERROR_PATTERN_LINKS : "matches"
+    ERROR_PATTERNS ||--o{ ERROR_PATTERN_LINKS : "contains"
+    ERRORS ||--|| BUILD_CONTEXTS : "occurred_in"
+    ERRORS ||--o{ LLM_INTERACTIONS : "processed_by"
+    ERRORS ||--o{ RESOLUTION_METRICS : "tracked_in"
+    SOLUTIONS ||--o{ RESOLUTION_METRICS : "measured_by"
+    SOLUTIONS ||--o{ SOLUTION_FEEDBACK : "receives"
